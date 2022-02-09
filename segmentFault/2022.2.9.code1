@@ -1,3 +1,4 @@
+``` c++
 #include<stdio.h>
 #include<string.h>
 #include<iostream>
@@ -59,3 +60,4 @@ inline int read() {
 	}
 	return flag ? x : ~(x - 1);
 }
+```
