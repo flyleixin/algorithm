@@ -32,5 +32,55 @@
 题解：
 ```c++
 
+#include<iostream>
+#include<cstring>
+#include<algorithm>
+using namespace std;
+
+const int N = 510;
+int dist[N];
+int g[N][N];
+bool st[N];//标记这个点是否被加入
+int n, m;
+
+int prim() {
+    
+	memset(dist, 0x3f3f3f3f, sizeof dist);
+	int res = 0;
+	for (int i = 0; i < n; i++) {
+    //初始没有点在集合中
+		int t = -1;
+		for (int j = 1; j <= n; j++) {
+    
+			if (!st[j] && (dist[j] < dist[t] || t == -1)) {
+    
+				t = j;
+			}
+		}
+	if (i && dist[t] == 0x3f3f3f3f)return 0x3f3f3f3f;
+	//没有联通点 即不构成最小生成树
+	if (i) res += dist[t];
+	//要先更新res 
+	//如果在下面for循环后加可能会因为负边自环的问题导致res不对 
+	st[t] = true;
+	//更新的是点到集合的距离 这也就是和dijkstra算法的区别所在
+	for (int j = 1; j <= n; j++) dist[j] = min(dist[j], g[t][j]);
+	}
+	return res;
+}
+int main() {
+    
+	cin >> n >> m;
+	memset(g, 0x3f3f3f3f, sizeof g);//初始化
+	while (m--) {
+    
+		int u, v, w;
+		cin >> u >> v >> w;
+		g[u][v] = g[v][u] = min(g[u][v], w);//存储无向图
+	}
+	int t = prim();
+	if (t == 0x3f3f3f3f)puts("impossible");
+	else cout << t << endl;
+}
 
 ```
