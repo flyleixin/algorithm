@@ -1,0 +1,94 @@
+Acwing 859. Kruskal算法求最小生成树
+Acwing
+给定一个n个点m条边的无向图，图中可能存在重边和自环，边权可能为负数。
+
+求最小生成树的树边权重之和，如果最小生成树不存在则输出impossible。
+
+给定一张边带权的无向图G=(V, E)，其中V表示图中点的集合，E表示图中边的集合，n=|V|，m=|E|。
+
+由V中的全部n个顶点和E中n-1条边构成的无向连通子图被称为G的一棵生成树，其中边的权值之和最小的生成树被称为无向图G的最小生成树。
+
+输入格式
+
+第一行包含两个整数n和m。
+
+接下来m行，每行包含三个整数u，v，w，表示点u和点v之间存在一条权值为w的边。
+
+输出格式
+
+共一行，若存在最小生成树，则输出一个整数，表示最小生成树的树边权重之和，如果最小生成树不存在则输出impossible。
+
+数据范围
+
+1≤n≤10^5,
+1≤m≤2∗10^5,
+图中涉及边的边权的绝对值均不超过1000。
+输入样例：
+
+4 5
+1 2 1
+1 3 2
+1 4 3
+2 3 2
+3 4 4
+输出样例：
+
+6
+Kruskal 算法的思想是: 先将所有的边按从小到大的顺序进行排序,排完序之后从小到大的遍历一遍所有的边,如果当前遍历到的边的两端的端点不是连通的,也就是不在一个集合中的话,就加入这条边。
+
+因为如果一条边的两个端点不是连通的,为了使他连通的话,加入当前边的代价是最小的,因为之前对所有的边进行了从小到大的排序了。
+ 
+
+#include<iostream>
+#include<algorithm>
+
+using namespace std;
+
+int p[100010];
+
+struct Edge{
+    int a;
+    int b;
+    int w;
+    bool operator < (const Edge& c)const{
+        return w < c.w;
+    }
+}edge[200010];
+
+int find(int x){
+    if (p[x] != x){
+        p[x] = find(p[x]);
+    }
+    return p[x];
+}
+
+int main(){
+    int n,m,a,x,y,w;
+    cin>>n>>m;
+    for (int i = 0 ; i < m; i++){
+        scanf("%d%d%d",&x,&y,&w);
+        edge[i] = {x,y,w};
+    }
+    
+    sort(edge,edge + m);
+    
+    for (int i = 1 ; i <= n; ++i) p[i] = i;  //并查集的初始化操作,使得每个点的父亲结点都是自己
+    
+    int res = 0,cnt = 0;
+    
+    for (int i = 0; i < m; ++i){
+        int x = edge[i].a;
+        int y = edge[i].b;
+        int ww = edge[i].w;
+        int px = find(x);
+        int py = find(y);
+        if (px != py){
+            cnt ++;
+            res += ww;
+            p[px] = py;
+        }
+    }
+    if (cnt < n - 1) puts("impossible");
+    else cout<<res<<endl;
+    return 0;
+}
