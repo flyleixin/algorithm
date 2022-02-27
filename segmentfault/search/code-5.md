@@ -1,36 +1,61 @@
-```c++
-#include <iostream>
-#include <string>
+#include<iostream>
 using namespace std;
-//n是多少个数，arr是这n个数，k是目标和
-int n,arr[25],k;
+#define max 1001
+#define INF 100000
 
+int list[3000];
+int lt = 0;
+int len = 0;
+int visited[max] = { 0 };
+int edges[1001][1001];
 
-
-// 已经从前i项得到了和sum，然后对于i项之后的进行分支 
-bool dfs(int i, int sum) { 
-  // 如果前n项都计算过了，则返回sum是否与k相等 
-  if (i == n) return sum == k;  
-   
-  // 不加上a[i]的情况 
-  if (dfs(i + 1, sum)) return true; 
-   
-  // 加上a[i]的情况 
-  if (dfs(i + 1, sum + arr[i])) return true; 
-   
-  // 无论是否加上a[i]都不能凑成k就返回false 
-  return false; 
-} 
-int main(){
-    ios::sync_with_stdio(false);
-    
-    while(cin>>n){
-        for(int i = 0;i < n; i++)  cin>>arr[i];
-        cin>>k;
-        if(dfs(0,0)==true) cout<<"Yes"<<endl;
-        else cout<<"No"<<endl;
-    }
-
-    return 0;
+void dfs(int n,int v)
+{
+	
+	visited[v] = 1;
+	list[len] = v;//！！！！！！！！！！！！！！！
+	len++;
+	lt++;
+	for (int w = 1; w <= n; w++)
+	{
+		if (edges[v][w] != INF&&visited[w] == 0)
+		{
+			dfs(n, w);
+			list[len++] = v;//!!!!!!!!!!!!!!!!!!!!!!!!!!
+		}
+	}
 }
-```
+
+int main()
+{
+	int n, m, s;
+	cin >> n >> m >> s;
+
+	for (int i = 0; i <max; i++)
+	{
+		for (int j = 0; j < max; j++)
+			edges[i][j] = INF;
+	}
+	for (int i = 0; i < m; i++)
+	{
+		int a, b;
+		cin >> a >> b;
+		edges[a][b] = 1;
+		edges[b][a] = 1;
+	}
+	dfs(n, s);
+
+	if(lt!=n)
+		list[len++] = 0;//没有完全走完就在后面添加一个0
+	int count = 0;
+	for (int i = 0; i < len; i++)
+	{
+		if (count == 0)
+		{
+			cout << list[i]; count++;
+		}
+		else
+			cout << " " << list[i];
+	}
+
+}
