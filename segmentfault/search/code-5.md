@@ -1,3 +1,4 @@
+```c++
 #include<iostream>
 using namespace std;
 #define max 1001
@@ -59,3 +60,4 @@ int main()
 	}
 
 }
+```
