@@ -1,4 +1,104 @@
 ``` c++
+
+#include<iostream>
+#include<cstring>
+#include<string>
+#include<algorithm>
+using namespace std;
+struct node {
+	int u, v, w;
+
+}e[200010];
+int fa[5010];
+int find(int x) {
+	if (x != fa[x]) {
+		fa[x] = find(fa[x]);
+	}
+	return fa[x];
+}
+void unions(int x, int y) {
+	if (find(x) != find(y)) {
+		fa[find(x)] = find(y);
+	}
+}
+int n, m;
+bool cmp(node x, node y) {
+	return x.w < y.w;
+}
+int ans;
+void kruskal() {
+	int cnt = 0;
+	sort(e+1, e + m+1, cmp);
+	for (int i = 1; i <= m; i++) {
+		int uu = find(e[i].u);
+		int vv = find(e[i].v);
+		if (uu == vv) {
+			continue;
+		}
+		ans += e[i].w;
+		unions(e[i].u, e[i].v);
+		cnt++;
+		if (cnt == n - 1) {
+			return;
+		}
+	}
+}
+int main() {
+	ios::sync_with_stdio(false);
+	cin >> n >> m;
+	for (int i = 1; i <= n; i++) {
+		fa[i] = i;
+	}
+	for (int i = 1; i <= m; i++) {
+		int u, v, w;
+		cin >> u >> v >> w;
+		e[i].u = u;
+		e[i].v = v;
+		e[i].w = w;
+	}
+	kruskal();
+	for (int i = 2; i <= n; i++) {
+		if (find(1) != find(i)) {
+			cout << "orz";
+			return 0;
+		}
+	}
+	cout << ans;
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #include<iostream>
 #include<string>
 #include<algorithm>
