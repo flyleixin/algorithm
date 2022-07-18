@@ -1,0 +1,23 @@
+class Solution {
+public:
+    int gcd(int a,int b){
+        return b ? gcd(b,a%b):a;
+    }
+    int minOperations(vector<int>& nums, vector<int>& numsDivide) {
+        int gcdn = numsDivide[0];
+        for(auto & item : numsDivide){
+            gcdn = gcd(item,gcdn);
+        }
+        int res = 0;
+        sort(nums.begin(),nums.end());
+        for(int i = 0;i<nums.size();i++){
+            if(gcdn % nums[i] != 0){
+                res++;
+            }else{
+                break;
+            }
+        }
+         return res == nums.size() ? -1 : res; 
+    }
+    
+};

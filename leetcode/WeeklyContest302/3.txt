@@ -1,0 +1,18 @@
+class Solution {
+public:
+    vector<int> smallestTrimmedNumbers(vector<string>& nums, vector<vector<int>>& queries) {
+        int n = nums.size(),m = nums[0].size(),q = queries.size();
+        vector<int> ans(q);
+        for(int i = 0; i < q; i++){
+            int  k = queries[i][0], t = queries[i][1];
+            //用pair保存字符串和它原来的位置
+            vector<pair<string,int> >ve(n);
+            for(int j = 0; j < n; j++){
+                ve[j] = {nums[j].substr(m - t),j};
+            }
+            sort(ve.begin(),ve.end());
+            ans[i] = (ve[k-1].second);
+        }
+        return ans;
+    }
+};
